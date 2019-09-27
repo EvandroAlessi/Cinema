@@ -1,23 +1,26 @@
 package DAO;
 
+import DAL.Contexto;
+import Models.Sessao;
+
 /**
  * Sessao
  */
 public class SessaoDAO {
-    private static Context _contexto;
+    private static Contexto _contexto;
 
     public SessaoDAO() {
-        _contexto = new Context();
+        _contexto = new Contexto();
     }
 
     public Sessao adicionarSessao(Sessao filme)
     {
-        return 0;
+        return null;
     }
     
     public boolean editarSessao(Sessao filme)
     {
-        return null;
+        return false;
     }
 
     public Sessao buscarSessao(int filmeID)
@@ -27,6 +30,6 @@ public class SessaoDAO {
 
     public boolean excluirSessao(int filmeID)
     {
-        return null;
+        return false;
     }
 }

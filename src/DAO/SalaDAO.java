@@ -1,25 +1,26 @@
 package DAO;
 
-import Models;
+import DAL.Contexto;
+import Models.Sala;
 
 /**
  * Sala
  */
 public class SalaDAO {
-    private static Context _contexto;
+    private static Contexto _contexto;
 
     public SalaDAO() {
-        _contexto = new Context();
+        _contexto = new Contexto();
     }
 
     public Sala adicionarSala(Sala sala)
     {
-        return 0;
+        return null;
     }
     
     public boolean editarSala(Sala sala)
     {
-        return null;
+        return false;
     }
 
     public Sala buscarSala(int salaID)
@@ -29,6 +30,6 @@ public class SalaDAO {
 
     public boolean excluirSala(int salaID)
     {
-        return null;
+        return false;
     }
 }

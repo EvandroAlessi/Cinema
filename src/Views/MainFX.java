@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cinema;
+package Views;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -17,7 +17,7 @@ import javafx.stage.Stage;
  *
  * @author a2065428
  */
-public class Cinema extends Application {
+public class MainFX extends Application {
     
     @Override
     public void start(Stage primaryStage) {

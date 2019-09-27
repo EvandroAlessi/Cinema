@@ -8,18 +8,29 @@ public class Filme {
     private String diretor;
     private String genero;
     private String idioma;
-    private int duração;
+    private int duracao;
 
+    public Filme() {
+    }
+
+    public Filme(String titulo, String diretor, String genero, String idioma, int duracao) {
+        this.titulo = titulo;
+        this.diretor = diretor;
+        this.genero = genero;
+        this.idioma = idioma;
+        this.duracao = duracao;
+    }
+    
     public String getDiretor() {
         return diretor;
     }
 
     public int getDuração() {
-        return duração;
+        return duracao;
     }
 
     public void setDuração(int duração) {
-        this.duração = duração;
+        this.duracao = duração;
     }
 
     public String getIdioma() {
