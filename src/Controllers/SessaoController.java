@@ -32,7 +32,7 @@ public class SessaoController {
         try {
             SessaoDAO dao = new SessaoDAO();
 
-            if (sessao.getIngressos() > 0) {
+            //if (sessao.getIngressos() > 0) {
                 if (sessao.getData() != null) {
                     if (sessao.getValorIngresso() >= 0) {
                         if (!dao.exists(sessao.getSalaID())) {
@@ -50,9 +50,9 @@ public class SessaoController {
                 }else{
                     Mensagem.aviso("A data deve ser preenchida.");
                 }
-            } else {
-                Mensagem.aviso("A sessão deve conter um quantia de Ingressos.");
-            }
+            //} else {
+                //Mensagem.aviso("A sessão deve conter um quantia de Ingressos.");
+            //}
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
             Mensagem.excecao(e);

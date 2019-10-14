@@ -8,6 +8,7 @@ package DAO;
 import Models.Sala;
 import Models.Sessao;
 import Models.Filme;
+import static com.sun.jmx.mbeanserver.Util.cast;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,6 +17,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import static sun.invoke.util.ValueConversions.cast;
+import static sun.management.GcInfoCompositeData.cast;
 
 /**
  * DAO Sessao
@@ -59,7 +62,7 @@ public class SessaoDAO {
         try (PreparedStatement preparestatement = contexto.getConexao().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparestatement.setInt(1, sessao.getFilmeID()); //substitui o ? pelo dado do usuario
             preparestatement.setInt(3, sessao.getSalaID());
-            preparestatement.setInt(4, sessao.getIngressos());
+            preparestatement.setInt(4, SalaDAO.getCapacidade(sessao.getSalaID()));
             preparestatement.setDate(2, Date.valueOf(sessao.getData()));
             preparestatement.setDouble(2, sessao.getValorIngresso());
             
@@ -69,14 +72,15 @@ public class SessaoDAO {
                 ResultSet id = preparestatement.getGeneratedKeys();
                 if (id.next()) {
                     sessao.setSessaoID(id.getInt(1));
+                    
                     return true;
                 }
             }
+
             return false;
         } catch (SQLException e) {
             throw e;
         }
-
     }
 
     /**
@@ -93,6 +97,9 @@ public class SessaoDAO {
 
         return dados.next();
     }
+
+
+
 
     /**
      *
@@ -111,7 +118,7 @@ public class SessaoDAO {
             sessao.setFilmeID(dados.getInt("FilmeID"));
             sessao.setSalaID(dados.getInt("SalaID"));
             sessao.setIngressos(dados.getInt("Ingressos"));
-            sessao.setData(dados.getDate("Data").toLocalDateTime());
+            sessao.setData(cast.toLocalDateTime(dados.getDate("Data")));
             sessao.setValorIngresso(dados.getDouble("ValorIngresso"));
 
             String queryFilme = "select * from Filmes where FilmeID = '"
@@ -150,10 +157,6 @@ public class SessaoDAO {
     }
 
     /**
-     *
-     * @param untilNow
-     * @param beginDate
-     * @param endDate
      * @return @throws ClassNotFoundException
      * @throws SQLException
      */
@@ -211,6 +214,66 @@ public class SessaoDAO {
         return list;
     }
     
+    /**
+     *
+     * @param titulo
+     * @return @throws ClassNotFoundException
+     * @throws SQLException
+     */
+    public ArrayList<Sessao> getAllSessionsByMovieTitle(String titulo) throws ClassNotFoundException, SQLException {
+        String query = "select s.* from Sessoes AS s LEFT JOIN Filmes AS f ON (f.FilmeID = s.FilmeID) WHERE f.Titulo like '%"+ titulo +"%' order by f.Titulo asc, s.Data desc;";
+        System.out.println(query);
+        ArrayList<Sessao> list = new ArrayList<>();
+
+        ResultSet dados = contexto.executeQuery(query);
+
+        while (dados.next()) {
+            Sessao sessao = new Sessao();
+
+            sessao.setSessaoID(dados.getInt("SessaoID"));
+            sessao.setFilmeID(dados.getInt("FilmeID"));
+            sessao.setSalaID(dados.getInt("SalaID"));
+            sessao.setIngressos(dados.getInt("Ingressos"));
+            sessao.setData(dados.getDate("Data").toLocalDateTime());
+            sessao.setValorIngresso(dados.getDouble("ValorIngresso"));
+
+            String queryFilme = "select * from Filmes where FilmeID = '"
+                    + dados.getInt("FilmeID")
+                    + "';";
+            ResultSet dadosFilme = contexto.executeQuery(queryFilme);
+
+            while (dadosFilme.next()) {
+                sessao.setFilme(
+                        new Filme(
+                            dadosFilme.getInt("FilmeID"),
+                            dadosFilme.getString("Titulo"),
+                            dadosFilme.getString("Diretor"),
+                            dadosFilme.getString("Genero"),
+                            dadosFilme.getString("Idioma"),
+                            dadosFilme.getInt("Duracao")
+                ));
+            }
+
+            String querySala = "select * from Salas where SalaID = '"
+                        + dados.getInt("SalaID")
+                        + "';";
+            ResultSet dadosSala = contexto.executeQuery(querySala);
+
+            while (dadosSala.next()) {
+                sessao.setSala((
+                        new Sala(
+                                dadosSala.getInt("SalaID"),
+                                dadosSala.getInt("Numero"),
+                                dadosSala.getInt("Capacidade")
+                )));
+            }
+
+            list.add(sessao);
+        }
+
+        return list;
+    }
+
     /**
      *
      * @param Sessao

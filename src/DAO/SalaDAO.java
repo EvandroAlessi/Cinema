@@ -92,6 +92,25 @@ public class SalaDAO {
      * @throws ClassNotFoundException
      * @throws SQLException
      */
+    public static int getCapacidade(int id) throws ClassNotFoundException, SQLException {
+        String query = "select Capacidade from Salas where SalaID = '" + id + "';";
+        Sala sala = new Sala();
+        ResultSet dados = contexto.executeQuery(query);
+
+        while (dados.next()) {
+            sala.setCapacidade(dados.getInt("Capacidade"));
+        }
+
+        return sala;
+    }
+
+    /**
+     *
+     * @param id
+     * @return
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     public Sala get(int id) throws ClassNotFoundException, SQLException {
         String query = "select * from Salas where SalaID = '" + id + "';";
         Sala sala = new Sala();
@@ -100,7 +119,7 @@ public class SalaDAO {
         while (dados.next()) {
             sala.setSalaID(dados.getInt("SalaID"));
             sala.setNumero(dados.getInt("Numero"));
-            sala.setCapacidade(dados.getInt("Capacidade"));//.toLocalDate()
+            sala.setCapacidade(dados.getInt("Capacidade"));
         }
 
         return sala;

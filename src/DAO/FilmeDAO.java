@@ -85,6 +85,7 @@ public class FilmeDAO {
 
         while (dados.next()) {
             Filme filme = new Filme();
+            
             filme.setFilmeID(dados.getInt("FilmeID"));
             filme.setTitulo(dados.getString("Titulo"));
             filme.setDiretor(dados.getString("Diretor"));
