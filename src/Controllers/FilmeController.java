@@ -9,6 +9,7 @@ import CrossCutting.Log;
 import CrossCutting.Mensagem;
 import DAO.FilmeDAO;
 import Models.Filme;
+import com.sun.xml.internal.ws.util.StringUtils;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,10 +35,10 @@ public class FilmeController {
         try {
             FilmeDAO dao = new FilmeDAO();
             
-            if (StringUtils.isNotBlank(filme.getTitulo())) {
-                if (StringUtils.isNotBlank(filme.getDiretor())) {
-                    if (StringUtils.isNotBlank(filme.getGenero())) {
-                        if (StringUtils.isNotBlank(filme.getIdioma())) {
+            if (filme.getTitulo() != null && filme.getTitulo().length() > 0) {
+                if (filme.getDiretor() != null && filme.getDiretor().length() > 0) {
+                    if (filme.getGenero() != null && filme.getGenero().length() > 0) {
+                        if (filme.getIdioma() != null && filme.getIdioma().length() > 0) {
                             if (filme.getDuracao() > 0) {
                                 if (!dao.exists(filme.getTitulo())) {
                                     if (dao.create(filme)) {
@@ -152,10 +153,10 @@ public class FilmeController {
         try {
             FilmeDAO dao = new FilmeDAO();
 
-            if (StringUtils.isNotBlank(filme.getTitulo())) {
-                if (StringUtils.isNotBlank(filme.getDiretor())) {
-                    if (StringUtils.isNotBlank(filme.getGenero())) {
-                        if (StringUtils.isNotBlank(filme.getIdioma())) {
+             if (filme.getTitulo() != null && filme.getTitulo().length() > 0) {
+                if (filme.getDiretor() != null && filme.getDiretor().length() > 0) {
+                    if (filme.getGenero() != null && filme.getGenero().length() > 0) {
+                        if (filme.getIdioma() != null && filme.getIdioma().length() > 0) {
                             if (filme.getDuracao() > 0) {
                                 if (!dao.exists(filme.getTitulo())) {
                                     if (dao.update(filme)) {

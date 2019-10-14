@@ -5,7 +5,7 @@
  */
 package Models;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Modelo estrutural de Sessao.
@@ -24,7 +24,7 @@ public class Sessao {
     private Filme filme;
     private Sala sala;
 
-    public Sessao(int sessaoID, int filmeID, int salaID, int ingressos, LocalDate data, double valorIngresso, Filme filme, Sala sala) {
+    public Sessao(int sessaoID, int filmeID, int salaID, int ingressos, LocalDateTime data, double valorIngresso, Filme filme, Sala sala) {
         this.sessaoID = sessaoID;
         this.filmeID = filmeID;
         this.salaID = salaID;
@@ -70,11 +70,11 @@ public class Sessao {
         this.ingressos = ingressos;
     }
 
-    public LocalDate getData() {
+    public LocalDateTime getData() {
         return data;
     }
 
-    public void setData(LocalDate data) {
+    public void setData(LocalDateTime data) {
         this.data = data;
     }
 

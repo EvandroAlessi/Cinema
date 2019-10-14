@@ -78,7 +78,7 @@ public class FilmeDAO {
 
 
     public ArrayList<Filme> find(String titulo) throws SQLException, ClassNotFoundException {
-        String query = "select f.* from Filmes AS f LEFT JOIN Sessoes AS s ON (f.FilmeID = s.FilmeID) WHERE f.Titulo like '%"+ titulo +"%' order by f.Titulo;";
+        String query = "select f.* from Filmes AS f RIGHT JOIN Sessoes AS s ON (f.FilmeID = s.FilmeID) WHERE f.Titulo like '%"+ titulo +"%' order by f.Titulo;";
         ArrayList<Filme> lista = new ArrayList<>();
 
         ResultSet dados = contexto.executeQuery(query);
@@ -190,7 +190,7 @@ public class FilmeDAO {
      * @throws SQLException
      */
     public ArrayList<Filme> getAllInCartaz() throws SQLException, ClassNotFoundException {
-        String query = "select f.* from Filmes AS f LEFT JOIN Sessoes AS s ON (f.FilmeID = s.FilmeID) order by Titulo;";
+        String query = "select f.* from Filmes AS f RIGHT JOIN Sessoes AS s ON (f.FilmeID = s.FilmeID) order by Titulo;";
         ArrayList<Filme> lista = new ArrayList<>();
 
         ResultSet dados = contexto.executeQuery(query);
