@@ -19,7 +19,7 @@ public class Sessao {
     private int filmeID;
     private int salaID;
     private int ingressos;
-    private LocalDate data;
+    private LocalDateTime data;
     private double valorIngresso;
     private Filme filme;
     private Sala sala;

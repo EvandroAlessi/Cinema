@@ -7,54 +7,54 @@ package Controllers;
 
 import CrossCutting.Log;
 import CrossCutting.Mensagem;
-import DAO.DespesaDAO;
-import Models.Despesa;
+import DAO.SalaDAO;
+import Models.Sala;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
- * Controlador de Despesa
+ * Controlador de Sala
  * Propicia a comunicação entre a GUI e DAO
  * Implementa a lógica de negócios
  * @author Evandro Alessi
  * @author Eric Ueta
- * @see Despesa
- * @see DespesaDAO
+ * @see Sala
+ * @see SalaDAO
  */
-public class DespesaController {
+public class SalaController {
 
     /**
      *
-     * @param despesa
+     * @param sala
      * @return
      */
-    public Despesa create(Despesa despesa) {
+    public Sala create(Sala sala) {
         try {
-            DespesaDAO dao = new DespesaDAO();
-            if (despesa.getSubCategoria() != null) {
-                if (despesa.getSubCategoria().getSubCategoriaID() != 0 && despesa.getDescricao().trim().length() > 0 && despesa.getDescricao() != null) {
-                    if (despesa.getValor() > 0) {
-                        if (despesa.getFormaPagamento() != 0) {
-                            if (despesa.getDataOcorrencia() == null) {
-                                despesa.setDataOcorrencia(LocalDate.now());
+            SalaDAO dao = new SalaDAO();
+            if (sala.getSubCategoria() != null) {
+                if (sala.getSubCategoria().getSubCategoriaID() != 0 && sala.getDescricao().trim().length() > 0 && sala.getDescricao() != null) {
+                    if (sala.getValor() > 0) {
+                        if (sala.getFormaPagamento() != 0) {
+                            if (sala.getDataOcorrencia() == null) {
+                                sala.setDataOcorrencia(LocalDate.now());
                             }
-                            if (dao.create(despesa)) {
-                                return despesa;
+                            if (dao.create(sala)) {
+                                return sala;
                             } else {
-                                Mensagem.aviso("Não foi possivel cadastrar a Despesa.");
+                                Mensagem.aviso("Não foi possivel cadastrar a Sala.");
                             }
                         } else {
                             Mensagem.aviso("Deve ser selecionada uma forma de pagamento.");
                         }
                     } else {
-                        Mensagem.aviso("A Despesa deve ter um valor e ele não pode ser negativo.");
+                        Mensagem.aviso("A Sala deve ter um valor e ele não pode ser negativo.");
                     }
                 } else {
-                    Mensagem.aviso("A Despesa deve ter uma Descricao.");
+                    Mensagem.aviso("A Sala deve ter uma Descricao.");
                 }
             } else {
-                Mensagem.aviso("A despesa deve ter um Categoria.");
+                Mensagem.aviso("A sala deve ter um Categoria.");
             }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
@@ -69,11 +69,11 @@ public class DespesaController {
      * @param id
      * @return
      */
-    public Despesa get(int id) {
+    public Sala get(int id) {
         try {
-            Despesa despesa = new DespesaDAO().get(id);
+            Sala sala = new SalaDAO().get(id);
 
-            return despesa;
+            return sala;
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
             Mensagem.excecao(e);
@@ -86,11 +86,11 @@ public class DespesaController {
      *
      * @return
      */
-    public ArrayList<Despesa> getAll() {
+    public ArrayList<Sala> getAll() {
         try {
-            ArrayList<Despesa> despesas = new DespesaDAO().getAll();
+            ArrayList<Sala> salas = new SalaDAO().getAll();
 
-            return despesas;
+            return salas;
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
             Mensagem.excecao(e);
@@ -101,21 +101,21 @@ public class DespesaController {
 
     /**
      *
-     * @param despesa
+     * @param sala
      * @return
      */
-    public Despesa update(Despesa despesa) {
+    public Sala update(Sala sala) {
         try {
-            DespesaDAO dao = new DespesaDAO();
-            if (despesa.getSubCategoria() != null) {
-                if (despesa.getMovimentacaoID() != 0 && despesa.getSubCategoria().getSubCategoriaID() != 0 && despesa.getDescricao().trim().length() > 0 && despesa.getDescricao() != null) {
-                    if (despesa.getValor() != 0) {
-                        if (despesa.getFormaPagamento() != 0) {
-                            if (despesa.getDataOcorrencia() == null) {
-                                despesa.setDataOcorrencia(LocalDate.now());
+            SalaDAO dao = new SalaDAO();
+            if (sala.getSubCategoria() != null) {
+                if (sala.getMovimentacaoID() != 0 && sala.getSubCategoria().getSubCategoriaID() != 0 && sala.getDescricao().trim().length() > 0 && sala.getDescricao() != null) {
+                    if (sala.getValor() != 0) {
+                        if (sala.getFormaPagamento() != 0) {
+                            if (sala.getDataOcorrencia() == null) {
+                                sala.setDataOcorrencia(LocalDate.now());
                             }
-                            if (dao.update(despesa)) {
-                                return despesa;
+                            if (dao.update(sala)) {
+                                return sala;
                             } else {
                                 Mensagem.aviso("Não foi possivel cadastrar a receita.");
                             }
@@ -126,10 +126,10 @@ public class DespesaController {
                         Mensagem.aviso("A receita deve ter um valor para a receita.");
                     }
                 } else {
-                    Mensagem.aviso("A despesa deve ter uma Descricao.");
+                    Mensagem.aviso("A sala deve ter uma Descricao.");
                 }
             } else {
-                Mensagem.aviso("A despesa deve ter uma Categoria.");
+                Mensagem.aviso("A sala deve ter uma Categoria.");
             }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
@@ -147,7 +147,7 @@ public class DespesaController {
     public boolean delete(int id) {
         try {
             if (id != 0) {
-                return new DespesaDAO().delete(id);
+                return new SalaDAO().delete(id);
             }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
@@ -163,7 +163,7 @@ public class DespesaController {
      */
     public String[] getAllMetaData() {
         try {
-            return new DespesaDAO().getAllMetaData();
+            return new SalaDAO().getAllMetaData();
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
             Mensagem.excecao(e);

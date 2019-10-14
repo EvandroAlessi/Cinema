@@ -7,8 +7,8 @@ package Controllers;
 
 import CrossCutting.Log;
 import CrossCutting.Mensagem;
-import DAO.CategoriaContaDAO;
-import Models.CategoriaConta;
+import DAO.SessaoDAO;
+import Models.Sessao;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -18,28 +18,28 @@ import java.util.ArrayList;
  * Implementa a lógica de negócios
  * @author Evandro Alessi
  * @author Eric Ueta
- * @see CategoriaConta
- * @see CategoriaContaDAO
+ * @see Sessao
+ * @see SessaoDAO
  */
-public class CategoriaContaController {
+public class SessaoController {
 
     /**
      *
-     * @param categoriaConta
+     * @param sessao
      * @return
      */
-    public CategoriaConta create(CategoriaConta categoriaConta) {
+    public Sessao create(Sessao sessao) {
         try {
-            CategoriaContaDAO dao = new CategoriaContaDAO();
-            if (categoriaConta.getDescricao().trim().length() > 0 && categoriaConta.getDescricao().trim().length() > 0 && categoriaConta.getDescricao() != null) {
-                if (!dao.exists(categoriaConta.getDescricao(), categoriaConta.isPositiva())) {
-                    if (dao.create(categoriaConta)) {
-                        return categoriaConta;
+            SessaoDAO dao = new SessaoDAO();
+            if (sessao.getDescricao().trim().length() > 0 && sessao.getDescricao().trim().length() > 0 && sessao.getDescricao() != null) {
+                if (!dao.exists(sessao.getDescricao(), sessao.isPositiva())) {
+                    if (dao.create(sessao)) {
+                        return sessao;
                     } else {
                         Mensagem.aviso("Não foi possivel criar a categoria.");
                     }
                 } else {
-                    if (categoriaConta.isPositiva()) {
+                    if (sessao.isPositiva()) {
                         Mensagem.aviso("Já existe um tipo de receita com essa Descrição.");
                     } else {
                         Mensagem.aviso("Já existe um tipo de despesa com essa Descrição.");
@@ -61,11 +61,11 @@ public class CategoriaContaController {
      * @param id
      * @return
      */
-    public CategoriaConta get(int id) {
+    public Sessao get(int id) {
         try {
             if (id != 0) {
-                CategoriaConta categoriaConta = new CategoriaContaDAO().get(id);
-                return categoriaConta;
+                Sessao sessao = new SessaoDAO().get(id);
+                return sessao;
             }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
@@ -79,11 +79,11 @@ public class CategoriaContaController {
      *
      * @return
      */
-    public ArrayList<CategoriaConta> getAll() {
+    public ArrayList<Sessao> getAll() {
         try {
-            ArrayList<CategoriaConta> categoriaContas = new CategoriaContaDAO().getAll();
+            ArrayList<Sessao> sessaos = new SessaoDAO().getAll();
 
-            return categoriaContas;
+            return sessaos;
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
             Mensagem.excecao(e);
@@ -97,11 +97,11 @@ public class CategoriaContaController {
      * @param positiva
      * @return
      */
-    public ArrayList<CategoriaConta> getAll(boolean positiva) {
+    public ArrayList<Sessao> getAll(boolean positiva) {
         try {
-            ArrayList<CategoriaConta> categoriaContas = new CategoriaContaDAO().getAll(positiva);
+            ArrayList<Sessao> sessaos = new SessaoDAO().getAll(positiva);
 
-            return categoriaContas;
+            return sessaos;
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
             Mensagem.excecao(e);
@@ -112,21 +112,21 @@ public class CategoriaContaController {
     
     /**
      *
-     * @param categoriaConta
+     * @param sessao
      * @return
      */
-    public CategoriaConta update(CategoriaConta categoriaConta) {
+    public Sessao update(Sessao sessao) {
         try {
-            CategoriaContaDAO dao = new CategoriaContaDAO();
-            if (categoriaConta.getCategoriaContaID() != 0 && categoriaConta.getDescricao().trim().length() > 0 && categoriaConta.getDescricao() != null) {
-                if (!dao.exists(categoriaConta.getDescricao(), categoriaConta.isPositiva())) {
-                    if (dao.update(categoriaConta)) {
-                        return categoriaConta;
+            SessaoDAO dao = new SessaoDAO();
+            if (sessao.getSessaoID() != 0 && sessao.getDescricao().trim().length() > 0 && sessao.getDescricao() != null) {
+                if (!dao.exists(sessao.getDescricao(), sessao.isPositiva())) {
+                    if (dao.update(sessao)) {
+                        return sessao;
                     } else {
                         Mensagem.aviso("Não foi possivel realizar a Atualização.");
                     }
                 } else {
-                    if (categoriaConta.isPositiva()) {
+                    if (sessao.isPositiva()) {
                         Mensagem.aviso("Já existe uma categoria de receita com essa Descrição.");
                     } else {
                         Mensagem.aviso("Já existe uma categoria de despesa com essa Descrição.");
@@ -151,7 +151,7 @@ public class CategoriaContaController {
     public boolean delete(int id) {
         try {
             if (id != 0) {
-                return new CategoriaContaDAO().delete(id);
+                return new SessaoDAO().delete(id);
             }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);

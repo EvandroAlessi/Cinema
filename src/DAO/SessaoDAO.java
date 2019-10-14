@@ -112,7 +112,7 @@ public class SessaoDAO {
             sessao.setFilmeID(dados.getInt("FilmeID"));
             sessao.setSalaID(dados.getInt("SalaID"));
             sessao.setIngressos(dados.getInt("Ingressos"));
-            sessao.setData(dados.getDate("Data").toLocalDate());
+            sessao.setData(dados.getDate("Data").toLocalDateTime());
             sessao.setValorIngresso(dados.getDouble("ValorIngresso"));
 
             String queryFilme = "select * from Filmes where FilmeID = '"
@@ -172,7 +172,7 @@ public class SessaoDAO {
             sessao.setFilmeID(dados.getInt("FilmeID"));
             sessao.setSalaID(dados.getInt("SalaID"));
             sessao.setIngressos(dados.getInt("Ingressos"));
-            sessao.setData(dados.getDate("Data").toLocalDate());
+            sessao.setData(dados.getDate("Data").toLocalDateTime());
             sessao.setValorIngresso(dados.getDouble("ValorIngresso"));
 
             String queryFilme = "select * from Filmes where FilmeID = '"

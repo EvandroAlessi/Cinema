@@ -7,41 +7,41 @@ package Controllers;
 
 import CrossCutting.Log;
 import CrossCutting.Mensagem;
-import DAO.MovimentacaoDAO;
-import Models.Movimentacao;
+import DAO.FilmeDAO;
+import Models.Filme;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Controlador de Movimentacoes
+ * Controlador de Filmes
  * Propicia a comunicação entre a GUI e DAO
  * Implementa a lógica de negócios
  * @author Evandro Alessi
  * @author Eric Ueta
- * @see Movimentacao
- * @see MovimentacaoDAO
+ * @see Filme
+ * @see FilmeDAO
  */
-public class MovimentacaoController {
+public class FilmeController {
 
     /**
      *
-     * @param movimentacao
+     * @param filme
      * @return
      */
-    public Movimentacao create(Movimentacao movimentacao) {
+    public Filme create(Filme filme) {
         try {
-            MovimentacaoDAO dao = new MovimentacaoDAO();
-            if (movimentacao.getSubCategoria() != null) {
-                if (movimentacao.getSubCategoria().getSubCategoriaID() != 0 && movimentacao.getDescricao().trim().length() > 0 && movimentacao.getDescricao() != null) {
-                    if (movimentacao.getValor() != 0) {
-                        if (movimentacao.getFormaPagamento() != 0) {
-                            if (movimentacao.getDataOcorrencia() == null) {
-                                movimentacao.setDataOcorrencia(LocalDate.now());
+            FilmeDAO dao = new FilmeDAO();
+            if (filme.getSubCategoria() != null) {
+                if (filme.getSubCategoria().getSubCategoriaID() != 0 && filme.getDescricao().trim().length() > 0 && filme.getDescricao() != null) {
+                    if (filme.getValor() != 0) {
+                        if (filme.getFormaPagamento() != 0) {
+                            if (filme.getDataOcorrencia() == null) {
+                                filme.setDataOcorrencia(LocalDate.now());
                             }
-                            if (dao.create(movimentacao)) {
-                                return movimentacao;
+                            if (dao.create(filme)) {
+                                return filme;
                             } else {
                                 Mensagem.aviso("Não foi possivel cadastrar a receita.");
                             }
@@ -49,13 +49,13 @@ public class MovimentacaoController {
                             Mensagem.aviso("Deve ser selecionada uma forma de pagamento.");
                         }
                     } else {
-                        Mensagem.aviso("A movimentacao deve ter um valor para a receita.");
+                        Mensagem.aviso("A filme deve ter um valor para a receita.");
                     }
                 } else {
-                    Mensagem.aviso("A movimentacao deve ter uma Descricao.");
+                    Mensagem.aviso("A filme deve ter uma Descricao.");
                 }
             } else {
-                Mensagem.aviso("A movimentacao deve ter uma Categoria.");
+                Mensagem.aviso("A filme deve ter uma Categoria.");
             }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
@@ -70,11 +70,11 @@ public class MovimentacaoController {
      * @param id
      * @return
      */
-    public Movimentacao get(int id) {
+    public Filme get(int id) {
         try {
-            Movimentacao movimentacao = new MovimentacaoDAO().get(id);
+            Filme filme = new FilmeDAO().get(id);
 
-            return movimentacao;
+            return filme;
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
             Mensagem.excecao(e);
@@ -85,7 +85,7 @@ public class MovimentacaoController {
 
     public double getSaldo() {
         try {
-            return new MovimentacaoDAO().getSaldo();
+            return new FilmeDAO().getSaldo();
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
             Mensagem.excecao(e);
@@ -99,9 +99,9 @@ public class MovimentacaoController {
      * @param untilNow
      * @return
      */
-    public ArrayList<Movimentacao> getAll(boolean untilNow) {
+    public ArrayList<Filme> getAll(boolean untilNow) {
         try {
-            ArrayList<Movimentacao> movimentacoes = new MovimentacaoDAO().getAll(untilNow, null, null);
+            ArrayList<Filme> movimentacoes = new FilmeDAO().getAll(untilNow, null, null);
 
             return movimentacoes;
         } catch (ClassNotFoundException | SQLException e) {
@@ -119,9 +119,9 @@ public class MovimentacaoController {
      * @param endDate
      * @return
      */
-    public ArrayList<Movimentacao> getAll(boolean untilNow, LocalDate beginDate, LocalDate endDate) {
+    public ArrayList<Filme> getAll(boolean untilNow, LocalDate beginDate, LocalDate endDate) {
         try {
-            ArrayList<Movimentacao> movimentacoes = new MovimentacaoDAO().getAll(untilNow, beginDate, endDate);
+            ArrayList<Filme> movimentacoes = new FilmeDAO().getAll(untilNow, beginDate, endDate);
 
             return movimentacoes;
         } catch (ClassNotFoundException | SQLException e) {
@@ -134,23 +134,23 @@ public class MovimentacaoController {
     
     /**
      *
-     * @param movimentacao
+     * @param filme
      * @return
      */
-    public Movimentacao update(Movimentacao movimentacao) {
+    public Filme update(Filme filme) {
         try {
-            MovimentacaoDAO dao = new MovimentacaoDAO();
-            if (movimentacao.getSubCategoria() != null) {
-                if (movimentacao.getSubCategoria().getSubCategoriaID() != 0 && movimentacao.getDescricao().trim().length() > 0 && movimentacao.getDescricao() != null) {
-                    if (movimentacao.getValor() != 0) {
-                        if (movimentacao.getFormaPagamento() != 0) {
-                            if (movimentacao.getDataOcorrencia() == null) {
+            FilmeDAO dao = new FilmeDAO();
+            if (filme.getSubCategoria() != null) {
+                if (filme.getSubCategoria().getSubCategoriaID() != 0 && filme.getDescricao().trim().length() > 0 && filme.getDescricao() != null) {
+                    if (filme.getValor() != 0) {
+                        if (filme.getFormaPagamento() != 0) {
+                            if (filme.getDataOcorrencia() == null) {
                                 Date date = new Date();
                                 date.getTime();
-                                movimentacao.setDataOcorrencia(LocalDate.now());
+                                filme.setDataOcorrencia(LocalDate.now());
                             }
-                            if (dao.update(movimentacao)) {
-                                return movimentacao;
+                            if (dao.update(filme)) {
+                                return filme;
                             } else {
                                 Mensagem.aviso("Não foi possivel cadastrar a receita.");
                             }
@@ -158,10 +158,10 @@ public class MovimentacaoController {
                             Mensagem.aviso("Deve ser selecionada uma forma de pagamento.");
                         }
                     } else {
-                        Mensagem.aviso("A movimentacao deve ter um valor para a receita.");
+                        Mensagem.aviso("A filme deve ter um valor para a receita.");
                     }
                 } else {
-                    Mensagem.aviso("A movimentacao deve ter uma Descricao.");
+                    Mensagem.aviso("A filme deve ter uma Descricao.");
                 }
             } else {
                 Mensagem.aviso("A despesa deve ter uma Categoria.");
@@ -182,7 +182,7 @@ public class MovimentacaoController {
     public boolean delete(int id) {
         try {
             if (id != 0) {
-                return new MovimentacaoDAO().delete(id);
+                return new FilmeDAO().delete(id);
             }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
