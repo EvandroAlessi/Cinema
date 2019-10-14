@@ -82,13 +82,12 @@ public class SessaoDAO {
     /**
     *
     * @param salaID
-    * @param filmeID
     * @return
     * @throws ClassNotFoundException
     * @throws SQLException
     */
-    public boolean exists(int salaID, int filmeID) throws ClassNotFoundException, SQLException{
-        String query = "select * from Sessoes where SalaID = '"+ salaID +"' AND FilmeID = '"+ filmeID +"';";
+    public boolean exists(int salaID) throws ClassNotFoundException, SQLException{
+        String query = "select * from Sessoes where SalaID = '"+ salaID +"';";
 
         ResultSet dados = contexto.executeQuery(query);
 

@@ -32,29 +32,23 @@ public class SalaController {
     public Sala create(Sala sala) {
         try {
             SalaDAO dao = new SalaDAO();
-            if (sala.getSubCategoria() != null) {
-                if (sala.getSubCategoria().getSubCategoriaID() != 0 && sala.getDescricao().trim().length() > 0 && sala.getDescricao() != null) {
-                    if (sala.getValor() > 0) {
-                        if (sala.getFormaPagamento() != 0) {
-                            if (sala.getDataOcorrencia() == null) {
-                                sala.setDataOcorrencia(LocalDate.now());
-                            }
-                            if (dao.create(sala)) {
-                                return sala;
-                            } else {
-                                Mensagem.aviso("Não foi possivel cadastrar a Sala.");
-                            }
+
+            if (sala.getNumero() > 0) {
+                if (sala.getCapacidade() > 0) {
+                    if (!dao.exists(sala.getNumero())) {
+                        if (dao.create(sala)) {
+                            return sala;
                         } else {
-                            Mensagem.aviso("Deve ser selecionada uma forma de pagamento.");
+                            Mensagem.aviso("Não foi possivel cadastrar a Sala.");
                         }
                     } else {
-                        Mensagem.aviso("A Sala deve ter um valor e ele não pode ser negativo.");
+                        Mensagem.aviso("Já existe uma Sala cadastrada com este mesmo número.");
                     }
                 } else {
-                    Mensagem.aviso("A Sala deve ter uma Descricao.");
+                    Mensagem.aviso("A Sala deve ter uma Capacidade.");
                 }
             } else {
-                Mensagem.aviso("A sala deve ter um Categoria.");
+                Mensagem.aviso("A sala deve ter um Numero.");
             }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
@@ -106,30 +100,24 @@ public class SalaController {
      */
     public Sala update(Sala sala) {
         try {
-            SalaDAO dao = new SalaDAO();
-            if (sala.getSubCategoria() != null) {
-                if (sala.getMovimentacaoID() != 0 && sala.getSubCategoria().getSubCategoriaID() != 0 && sala.getDescricao().trim().length() > 0 && sala.getDescricao() != null) {
-                    if (sala.getValor() != 0) {
-                        if (sala.getFormaPagamento() != 0) {
-                            if (sala.getDataOcorrencia() == null) {
-                                sala.setDataOcorrencia(LocalDate.now());
-                            }
-                            if (dao.update(sala)) {
-                                return sala;
-                            } else {
-                                Mensagem.aviso("Não foi possivel cadastrar a receita.");
-                            }
+           SalaDAO dao = new SalaDAO();
+            
+            if (sala.getNumero() > 0) {
+                if (sala.getCapacidade() > 0) {
+                    if (!dao.exists(sala.getNumero())) {
+                        if (dao.update(sala)) {
+                            return sala;
                         } else {
-                            Mensagem.aviso("Deve ser selecionada uma forma de pagamento.");
+                            Mensagem.aviso("Não foi possivel atualizar a Sala.");
                         }
                     } else {
-                        Mensagem.aviso("A receita deve ter um valor para a receita.");
+                        Mensagem.aviso("Já existe uma Sala cadastrada com este mesmo número.");
                     }
                 } else {
-                    Mensagem.aviso("A sala deve ter uma Descricao.");
+                    Mensagem.aviso("A Sala deve ter uma Capacidade.");
                 }
             } else {
-                Mensagem.aviso("A sala deve ter uma Categoria.");
+                Mensagem.aviso("A sala deve ter um Numero.");
             }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);

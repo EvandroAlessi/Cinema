@@ -33,29 +33,37 @@ public class FilmeController {
     public Filme create(Filme filme) {
         try {
             FilmeDAO dao = new FilmeDAO();
-            if (filme.getSubCategoria() != null) {
-                if (filme.getSubCategoria().getSubCategoriaID() != 0 && filme.getDescricao().trim().length() > 0 && filme.getDescricao() != null) {
-                    if (filme.getValor() != 0) {
-                        if (filme.getFormaPagamento() != 0) {
-                            if (filme.getDataOcorrencia() == null) {
-                                filme.setDataOcorrencia(LocalDate.now());
+            
+            if (StringUtils.isNotBlank(filme.getTitulo())) {
+                if (StringUtils.isNotBlank(filme.getDiretor())) {
+                    if (StringUtils.isNotBlank(filme.getGenero())) {
+                        if (StringUtils.isNotBlank(filme.getIdioma())) {
+                            if (filme.getDuracao() > 0) {
+                                if (!dao.exists(filme.getTitulo())) {
+                                    if (dao.create(filme)) {
+                                        return filme;
+                                    } else {
+                                        Mensagem.aviso("Não foi possivel cadastrar o filme.");
+                                    }
+                                }
+                                else{
+                                    Mensagem.aviso("Já existe um Filme cadastrado com esse Titulo.");
+                                }
                             }
-                            if (dao.create(filme)) {
-                                return filme;
-                            } else {
-                                Mensagem.aviso("Não foi possivel cadastrar a receita.");
+                            else{
+                                Mensagem.aviso("O filme deve ter uma Duração.");
                             }
                         } else {
-                            Mensagem.aviso("Deve ser selecionada uma forma de pagamento.");
+                            Mensagem.aviso("O filme deve ter um Idioma.");
                         }
                     } else {
-                        Mensagem.aviso("A filme deve ter um valor para a receita.");
+                        Mensagem.aviso("O filme deve ter um Gênero.");
                     }
                 } else {
-                    Mensagem.aviso("A filme deve ter uma Descricao.");
+                    Mensagem.aviso("O filme deve ter um Diretor.");
                 }
             } else {
-                Mensagem.aviso("A filme deve ter uma Categoria.");
+                Mensagem.aviso("O filme deve ter um Título.");
             }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
@@ -83,27 +91,15 @@ public class FilmeController {
         return null;
     }
 
-    public double getSaldo() {
-        try {
-            return new FilmeDAO().getSaldo();
-        } catch (ClassNotFoundException | SQLException e) {
-            Log.saveLog(e);
-            Mensagem.excecao(e);
-        }
-
-        return 0;
-    }
-
     /**
      *
-     * @param untilNow
      * @return
      */
-    public ArrayList<Filme> getAll(boolean untilNow) {
+    public ArrayList<Filme> getAll() {
         try {
-            ArrayList<Filme> movimentacoes = new FilmeDAO().getAll(untilNow, null, null);
+            ArrayList<Filme> filmes = new FilmeDAO().getAll();
 
-            return movimentacoes;
+            return filmes;
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
             Mensagem.excecao(e);
@@ -114,16 +110,14 @@ public class FilmeController {
     
     /**
      *
-     * @param untilNow
-     * @param beginDate
-     * @param endDate
+     * @param diretor
      * @return
      */
-    public ArrayList<Filme> getAll(boolean untilNow, LocalDate beginDate, LocalDate endDate) {
+    public ArrayList<Filme> getAll(String diretor) {
         try {
-            ArrayList<Filme> movimentacoes = new FilmeDAO().getAll(untilNow, beginDate, endDate);
+            ArrayList<Filme> filmes = new FilmeDAO().getAll(diretor);
 
-            return movimentacoes;
+            return filmes;
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
             Mensagem.excecao(e);
@@ -132,6 +126,23 @@ public class FilmeController {
         return null;
     }
     
+    /** 
+     *
+     * @return
+     */
+    public ArrayList<Filme> getAllInCartaz() {
+        try {
+            ArrayList<Filme> filmes = new FilmeDAO().getAllInCartaz();
+
+            return filmes;
+        } catch (ClassNotFoundException | SQLException e) {
+            Log.saveLog(e);
+            Mensagem.excecao(e);
+        }
+
+        return null;
+    }
+
     /**
      *
      * @param filme
@@ -140,31 +151,37 @@ public class FilmeController {
     public Filme update(Filme filme) {
         try {
             FilmeDAO dao = new FilmeDAO();
-            if (filme.getSubCategoria() != null) {
-                if (filme.getSubCategoria().getSubCategoriaID() != 0 && filme.getDescricao().trim().length() > 0 && filme.getDescricao() != null) {
-                    if (filme.getValor() != 0) {
-                        if (filme.getFormaPagamento() != 0) {
-                            if (filme.getDataOcorrencia() == null) {
-                                Date date = new Date();
-                                date.getTime();
-                                filme.setDataOcorrencia(LocalDate.now());
+
+            if (StringUtils.isNotBlank(filme.getTitulo())) {
+                if (StringUtils.isNotBlank(filme.getDiretor())) {
+                    if (StringUtils.isNotBlank(filme.getGenero())) {
+                        if (StringUtils.isNotBlank(filme.getIdioma())) {
+                            if (filme.getDuracao() > 0) {
+                                if (!dao.exists(filme.getTitulo())) {
+                                    if (dao.update(filme)) {
+                                        return filme;
+                                    } else {
+                                        Mensagem.aviso("Não foi possivel atualizar o filme.");
+                                    }
+                                }
+                                else{
+                                    Mensagem.aviso("Já existe um Filme cadastrado com esse Titulo.");
+                                }
                             }
-                            if (dao.update(filme)) {
-                                return filme;
-                            } else {
-                                Mensagem.aviso("Não foi possivel cadastrar a receita.");
+                            else{
+                                Mensagem.aviso("O filme deve ter uma Duração.");
                             }
                         } else {
-                            Mensagem.aviso("Deve ser selecionada uma forma de pagamento.");
+                            Mensagem.aviso("O filme deve ter um Idioma.");
                         }
                     } else {
-                        Mensagem.aviso("A filme deve ter um valor para a receita.");
+                        Mensagem.aviso("O filme deve ter um Gênero.");
                     }
                 } else {
-                    Mensagem.aviso("A filme deve ter uma Descricao.");
+                    Mensagem.aviso("O filme deve ter um Diretor.");
                 }
             } else {
-                Mensagem.aviso("A despesa deve ter uma Categoria.");
+                Mensagem.aviso("O filme deve ter um Título.");
             }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);

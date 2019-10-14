@@ -4,8 +4,8 @@ use Cinema;
 
 CREATE TABLE IF NOT EXISTS Filmes (
 	FilmeID INT NOT NULL auto_increment,
-	Titulo VARCHAR(126) NULL,
-	Diretor VARCHAR(126) NULL,
+	Titulo VARCHAR(126) NOT NULL,
+	Diretor VARCHAR(126) NOT NULL,
 	Genero VARCHAR(126) NOT NULL,
 	Idioma VARCHAR(126) NOT NULL,
 	Duracao INT NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Sessoes (
 	SessaoID INT NOT NULL auto_increment,
     FilmeID INT NOT NULL,
 	SalaID INT NOT NULL,
-	Ingressos VARCHAR(126) NULL,
+	Ingressos INT NOT NULL,
 	Data DateTime NOT NULL,
 	ValorIngresso Numeric(5,2) NOT NULL,
     

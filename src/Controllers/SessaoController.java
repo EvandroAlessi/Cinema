@@ -31,22 +31,27 @@ public class SessaoController {
     public Sessao create(Sessao sessao) {
         try {
             SessaoDAO dao = new SessaoDAO();
-            if (sessao.getDescricao().trim().length() > 0 && sessao.getDescricao().trim().length() > 0 && sessao.getDescricao() != null) {
-                if (!dao.exists(sessao.getDescricao(), sessao.isPositiva())) {
-                    if (dao.create(sessao)) {
-                        return sessao;
-                    } else {
-                        Mensagem.aviso("Não foi possivel criar a categoria.");
+
+            if (sessao.getIngressos() > 0) {
+                if (sessao.getData() != null) {
+                    if (sessao.getValorIngresso() >= 0) {
+                        if (!dao.exists(sessao.getSalaID())) {
+                            if (dao.create(sessao)) {
+                                return sessao;
+                            } else {
+                                Mensagem.aviso("Não foi possivel abrir a sessão.");
+                            }
+                        } else {
+                            Mensagem.aviso("Já existe uma sessão para esta sala.");
+                        }
+                    }else{
+                        Mensagem.aviso("O valor do Ingresso não pode ser negativo ou nulo.");
                     }
-                } else {
-                    if (sessao.isPositiva()) {
-                        Mensagem.aviso("Já existe um tipo de receita com essa Descrição.");
-                    } else {
-                        Mensagem.aviso("Já existe um tipo de despesa com essa Descrição.");
-                    }
+                }else{
+                    Mensagem.aviso("A data deve ser preenchida.");
                 }
             } else {
-                Mensagem.aviso("A categoria deve ter uma Descrição.");
+                Mensagem.aviso("A sessão deve conter um quantia de Ingressos.");
             }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
@@ -81,27 +86,9 @@ public class SessaoController {
      */
     public ArrayList<Sessao> getAll() {
         try {
-            ArrayList<Sessao> sessaos = new SessaoDAO().getAll();
+            ArrayList<Sessao> sessoes = new SessaoDAO().getAll();
 
-            return sessaos;
-        } catch (ClassNotFoundException | SQLException e) {
-            Log.saveLog(e);
-            Mensagem.excecao(e);
-        }
-
-        return null;
-    }
-    
-    /**
-     *
-     * @param positiva
-     * @return
-     */
-    public ArrayList<Sessao> getAll(boolean positiva) {
-        try {
-            ArrayList<Sessao> sessaos = new SessaoDAO().getAll(positiva);
-
-            return sessaos;
+            return sessoes;
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
             Mensagem.excecao(e);
@@ -118,22 +105,27 @@ public class SessaoController {
     public Sessao update(Sessao sessao) {
         try {
             SessaoDAO dao = new SessaoDAO();
-            if (sessao.getSessaoID() != 0 && sessao.getDescricao().trim().length() > 0 && sessao.getDescricao() != null) {
-                if (!dao.exists(sessao.getDescricao(), sessao.isPositiva())) {
-                    if (dao.update(sessao)) {
-                        return sessao;
-                    } else {
-                        Mensagem.aviso("Não foi possivel realizar a Atualização.");
+
+            if (sessao.getIngressos() > 0) {
+                if (sessao.getData() != null) {
+                    if (sessao.getValorIngresso() >= 0) {
+                        if (!dao.exists(sessao.getSalaID())) {
+                            if (dao.update(sessao)) {
+                                return sessao;
+                            } else {
+                                Mensagem.aviso("Não foi possivel alterar a sessão.");
+                            }
+                        } else {
+                            Mensagem.aviso("Já existe uma sessão para esta sala.");
+                        }
+                    }else{
+                        Mensagem.aviso("O valor do Ingresso não pode ser negativo ou nulo.");
                     }
-                } else {
-                    if (sessao.isPositiva()) {
-                        Mensagem.aviso("Já existe uma categoria de receita com essa Descrição.");
-                    } else {
-                        Mensagem.aviso("Já existe uma categoria de despesa com essa Descrição.");
-                    }
+                }else{
+                    Mensagem.aviso("A data deve ser preenchida.");
                 }
             } else {
-                Mensagem.aviso("Deve ser selecionada uma categoria e a categoria deve ter uma Descrição.");
+                Mensagem.aviso("A sessão deve conter um quantia de Ingressos.");
             }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);

@@ -38,7 +38,7 @@ public class FilmeDAO {
     }
 
     /**
-     * Cria uma nova filme a partir do objeto recebido
+     * Cria um novo filme a partir do objeto recebido
      * @param filme
      * @return
      * @throws SQLException
@@ -76,8 +76,30 @@ public class FilmeDAO {
         return dados.next();
     }
 
+
+    public ArrayList<Filme> find(String titulo) throws SQLException, ClassNotFoundException {
+        String query = "select f.* from Filmes AS f LEFT JOIN Sessoes AS s ON (f.FilmeID = s.FilmeID) WHERE f.Titulo like '%"+ titulo +"%' order by f.Titulo;";
+        ArrayList<Filme> lista = new ArrayList<>();
+
+        ResultSet dados = contexto.executeQuery(query);
+
+        while (dados.next()) {
+            Filme filme = new Filme();
+            filme.setFilmeID(dados.getInt("FilmeID"));
+            filme.setTitulo(dados.getString("Titulo"));
+            filme.setDiretor(dados.getString("Diretor"));
+            filme.setGenero(dados.getString("Genero"));
+            filme.setIdioma(dados.getString("Idioma"));
+            filme.setDuracao (dados.getInt("Duracao"));
+
+            lista.add(filme);
+        }
+
+        return lista;
+    }
+
     /** 
-     * Busca a filme a partir do id informado
+     * Busca o filme a partir do id informado
      * 
      * @param id
      * @return 
@@ -102,9 +124,9 @@ public class FilmeDAO {
     }
 
     /**
-     * Busca todas as filmes existentes no banco de dados
+     * Busca todos os filmes existentes no banco de dados
      *
-     * @return ArrayList<Filme> lista de todas as filme
+     * @return ArrayList<Filme> lista de todos os filmes
      * @throws ClassNotFoundException
      * @throws SQLException
      */
@@ -129,16 +151,46 @@ public class FilmeDAO {
         return lista;
     }
 
+
     /**
-     * Busca todas as filmes existentes no banco de dados
+     * Busca todos os filmes existentes no banco de dados
      *
-     * @param Diretor despesa/receita
-     * @return ArrayList<Filme> lista de todas as filme
+     * @param Diretor 
+     * @return ArrayList<Filme> lista de todaos os filmes
      * @throws ClassNotFoundException
      * @throws SQLException
      */
     public ArrayList<Filme> getAll(String diretor) throws SQLException, ClassNotFoundException {
         String query = "select * from Filmes where Diretor like '"+ diretor +"' order by Titulo;";
+        ArrayList<Filme> lista = new ArrayList<>();
+
+        ResultSet dados = contexto.executeQuery(query);
+
+        while (dados.next()) {
+            Filme filme = new Filme();
+            filme.setFilmeID(dados.getInt("FilmeID"));
+            filme.setTitulo(dados.getString("Titulo"));
+            filme.setDiretor(dados.getString("Diretor"));
+            filme.setGenero(dados.getString("Genero"));
+            filme.setIdioma(dados.getString("Idioma"));
+            filme.setDuracao (dados.getInt("Duracao"));
+
+            lista.add(filme);
+        }
+
+        return lista;
+    }
+
+    /**
+     * Busca todas as filmes existentes no banco de dados
+     *
+     * @param Diretor 
+     * @return ArrayList<Filme> lista de todas as filme
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
+    public ArrayList<Filme> getAllInCartaz() throws SQLException, ClassNotFoundException {
+        String query = "select f.* from Filmes AS f LEFT JOIN Sessoes AS s ON (f.FilmeID = s.FilmeID) order by Titulo;";
         ArrayList<Filme> lista = new ArrayList<>();
 
         ResultSet dados = contexto.executeQuery(query);
