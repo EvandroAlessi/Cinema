@@ -92,16 +92,16 @@ public class SalaDAO {
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public static int getCapacidade(int id) throws ClassNotFoundException, SQLException {
+    public int getCapacidade(int id) throws ClassNotFoundException, SQLException {
         String query = "select Capacidade from Salas where SalaID = '" + id + "';";
-        Sala sala = new Sala();
+        int capacidade = -1;
         ResultSet dados = contexto.executeQuery(query);
 
         while (dados.next()) {
-            sala.setCapacidade(dados.getInt("Capacidade"));
+            capacidade = dados.getInt("Capacidade");
         }
 
-        return sala;
+        return capacidade;
     }
 
     /**

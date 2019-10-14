@@ -11,7 +11,6 @@ package CrossCutting.Enums;
  * @author Eric Ueta
  */
 public enum Tela {
-    
     RESUMO,
     ULTIMOS,
     RECEITA,

@@ -7,6 +7,7 @@ package Controllers;
 
 import CrossCutting.Log;
 import CrossCutting.Mensagem;
+import DAO.SalaDAO;
 import DAO.SessaoDAO;
 import Models.Sessao;
 import java.sql.SQLException;
@@ -31,8 +32,9 @@ public class SessaoController {
     public Sessao create(Sessao sessao) {
         try {
             SessaoDAO dao = new SessaoDAO();
-
-            //if (sessao.getIngressos() > 0) {
+            SalaDAO salaDAO = new SalaDAO();
+            
+            if (salaDAO.getCapacidade(sessao.getSalaID()) > 0) {
                 if (sessao.getData() != null) {
                     if (sessao.getValorIngresso() >= 0) {
                         if (!dao.exists(sessao.getSalaID(), sessao.getData())) {
@@ -50,9 +52,9 @@ public class SessaoController {
                 }else{
                     Mensagem.aviso("A data deve ser preenchida.");
                 }
-            //} else {
-                //Mensagem.aviso("A sessão deve conter um quantia de Ingressos.");
-            //}
+            } else {
+                Mensagem.aviso("A sala está com a capacidade incorreta.");
+            }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);
             Mensagem.excecao(e);
@@ -106,14 +108,16 @@ public class SessaoController {
         try {
             SessaoDAO dao = new SessaoDAO();
 
-            if (sessao.getIngressos() > 0) {
+            SalaDAO salaDAO = new SalaDAO();
+            
+            if (salaDAO.getCapacidade(sessao.getSalaID()) > 0) {
                 if (sessao.getData() != null) {
                     if (sessao.getValorIngresso() >= 0) {
-                        if (!dao.exists(sessao.getSalaID())) {
+                        if (!dao.exists(sessao.getSalaID(), sessao.getData())) {
                             if (dao.update(sessao)) {
                                 return sessao;
                             } else {
-                                Mensagem.aviso("Não foi possivel alterar a sessão.");
+                                Mensagem.aviso("Não foi possivel abrir a sessão.");
                             }
                         } else {
                             Mensagem.aviso("Já existe uma sessão para esta sala.");
@@ -125,7 +129,7 @@ public class SessaoController {
                     Mensagem.aviso("A data deve ser preenchida.");
                 }
             } else {
-                Mensagem.aviso("A sessão deve conter um quantia de Ingressos.");
+                Mensagem.aviso("A sala está com a capacidade incorreta.");
             }
         } catch (ClassNotFoundException | SQLException e) {
             Log.saveLog(e);

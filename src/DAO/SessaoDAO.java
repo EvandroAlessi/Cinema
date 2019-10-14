@@ -8,17 +8,14 @@ package DAO;
 import Models.Sala;
 import Models.Sessao;
 import Models.Filme;
-import static com.sun.jmx.mbeanserver.Util.cast;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import static sun.invoke.util.ValueConversions.cast;
-import static sun.management.GcInfoCompositeData.cast;
 
 /**
  * DAO Sessao
@@ -52,7 +49,7 @@ public class SessaoDAO {
 
     /**
      *
-     * @param Sessao
+     * @param sessao
      * @return
      * @throws ClassNotFoundException
      * @throws SQLException
@@ -60,11 +57,13 @@ public class SessaoDAO {
     public boolean create(Sessao sessao) throws ClassNotFoundException, SQLException {
         String sql = "insert into Sessoes(FilmeID, SalaID, Ingressos, Data, ValorIngresso)values(?, ?, ?, ?, ?)";
         try (PreparedStatement preparestatement = contexto.getConexao().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            
+            
             preparestatement.setInt(1, sessao.getFilmeID()); //substitui o ? pelo dado do usuario
-            preparestatement.setInt(3, sessao.getSalaID());
-            preparestatement.setInt(4, SalaDAO.getCapacidade(sessao.getSalaID()));
-            preparestatement.setDate(2, Date.valueOf(sessao.getData()));
-            preparestatement.setDouble(2, sessao.getValorIngresso());
+            preparestatement.setInt(2, sessao.getSalaID());
+            preparestatement.setInt(3, sessao.getIngressos());
+            preparestatement.setTimestamp(4, Timestamp.valueOf(sessao.getData()));
+            preparestatement.setDouble(5, sessao.getValorIngresso());
             
             //executando comando sql
             int result = preparestatement.executeUpdate();
@@ -86,6 +85,7 @@ public class SessaoDAO {
     /**
     *
     * @param salaID
+    * @param data
     * @return
     * @throws ClassNotFoundException
     * @throws SQLException
@@ -98,9 +98,6 @@ public class SessaoDAO {
 
         return dados.next();
     }
-
-
-
 
     /**
      *
@@ -119,7 +116,7 @@ public class SessaoDAO {
             sessao.setFilmeID(dados.getInt("FilmeID"));
             sessao.setSalaID(dados.getInt("SalaID"));
             sessao.setIngressos(dados.getInt("Ingressos"));
-            sessao.setData(cast.toLocalDateTime(dados.getDate("Data")));
+            sessao.setData(dados.getTimestamp("Data").toLocalDateTime());
             sessao.setValorIngresso(dados.getDouble("ValorIngresso"));
 
             String queryFilme = "select * from Filmes where FilmeID = '"
@@ -175,7 +172,7 @@ public class SessaoDAO {
             sessao.setFilmeID(dados.getInt("FilmeID"));
             sessao.setSalaID(dados.getInt("SalaID"));
             sessao.setIngressos(dados.getInt("Ingressos"));
-            sessao.setData(dados.getDate("Data").toLocalDateTime());
+            sessao.setData(dados.getTimestamp("Data").toLocalDateTime());
             sessao.setValorIngresso(dados.getDouble("ValorIngresso"));
 
             String queryFilme = "select * from Filmes where FilmeID = '"
@@ -235,7 +232,7 @@ public class SessaoDAO {
             sessao.setFilmeID(dados.getInt("FilmeID"));
             sessao.setSalaID(dados.getInt("SalaID"));
             sessao.setIngressos(dados.getInt("Ingressos"));
-            sessao.setData(dados.getDate("Data").toLocalDateTime());
+            sessao.setData(dados.getTimestamp("Data").toLocalDateTime());
             sessao.setValorIngresso(dados.getDouble("ValorIngresso"));
 
             String queryFilme = "select * from Filmes where FilmeID = '"
@@ -277,6 +274,7 @@ public class SessaoDAO {
 
     /**
      *
+     * @param sessao
      * @param Sessao
      * @return
      * @throws ClassNotFoundException
