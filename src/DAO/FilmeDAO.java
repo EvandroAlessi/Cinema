@@ -1,18 +1,23 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package DAO;
 
-import DAL.Contexto;
 import Models.Filme;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * Filme
+ * DAO Filme
+ * Responsável pela persistência dos Filmes
+ * @author Evandro Alessi
+ * @author Eric Ueta
+ * @see FilmeDAO
  */
 public class FilmeDAO {
+
     private final Contexto contexto = new Contexto();
 
     /**
@@ -21,7 +26,7 @@ public class FilmeDAO {
      * @throws SQLException
      */
     public String[] getAllMetaData() throws ClassNotFoundException, SQLException {
-        String query = "select * from Filme;";
+        String query = "SELECT * FROM Filmes;";
         ResultSetMetaData fields = contexto.executeQuery(query).getMetaData();
         String[] columns = new String[fields.getColumnCount()];
 
@@ -40,10 +45,13 @@ public class FilmeDAO {
      * @throws ClassNotFoundException
      */
     public boolean create(Filme filme) throws SQLException, ClassNotFoundException {
-        String sql = "insert into Filme(Descricao, Positiva)values(?,?)";
+        String sql = "INSERT INTO Filmes(Titulo, Diretor, Genero, Idioma, Duracao)values(?,?,?,?,?)";
         try (PreparedStatement preparestatement = contexto.getConexao().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            preparestatement.setString(1, filme.getDiretor()); //substitui o ? pelo dado do usuario
-            preparestatement.setInt(2, filme.get);
+            preparestatement.setString(1, filme.getTitulo()); //substitui o ? pelo dado do usuario
+            preparestatement.setString(2, filme.getDiretor()); 
+            preparestatement.setString(3, filme.getGenero());
+            preparestatement.setString(4, (filme.getIdioma());
+            preparestatement.setInt(5, filme.getDuracao());
 
             //executando comando sql
             int result = preparestatement.executeUpdate();
@@ -54,15 +62,14 @@ public class FilmeDAO {
                     return true;
                 }
             }
-            
             return false;
         } catch (SQLException e) {
             throw e;
         }
     }
 
-    public boolean exists(String desc, boolean positiva) throws ClassNotFoundException, SQLException {
-        String query = "select FilmeID from Filme where Descricao like '" + desc + "' AND Positiva = '" + (positiva ? 1 : 0) + "';";
+    public boolean exists(String titulo) throws ClassNotFoundException, SQLException {
+        String query = "select FilmeID from Filmes where Titulo like '" + titulo + "';";
 
         ResultSet dados = contexto.executeQuery(query);
 
@@ -78,14 +85,17 @@ public class FilmeDAO {
      * @throws SQLException
      */
     public Filme get(int id) throws ClassNotFoundException, SQLException {
-        String query = "select * from Filme where FilmeID = '" + id + "';";
+        String query = "select * from Filmes where FilmeID = '" + id + "';";
         Filme filme = new Filme();
         ResultSet dados = contexto.executeQuery(query);
 
         while (dados.next()) {
-            filme.setDescricao(dados.getString("Descricao"));
             filme.setFilmeID(dados.getInt("FilmeID"));
-            filme.setPositiva(dados.getBoolean("Positiva"));
+            filme.setTitulo(dados.getString("Titulo"));
+            filme.setDiretor(dados.getString("Diretor"));
+            filme.setGenero(dados.getString("Genero"));
+            filme.setIdioma(dados.getString("Idioma"));
+            filme.setDuracao(dados.getInt("Duracao"));
         }
 
         return filme;
@@ -99,16 +109,19 @@ public class FilmeDAO {
      * @throws SQLException
      */
     public ArrayList<Filme> getAll() throws SQLException, ClassNotFoundException {
-        String query = "select * from Filme order by Titulo;";
+        String query = "select * from Filmes order by Titulo;";
         ArrayList<Filme> lista = new ArrayList<>();
 
         ResultSet dados = contexto.executeQuery(query);
 
         while (dados.next()) {
             Filme filme = new Filme();
-            filme.setDescricao(dados.getString("Descricao"));
             filme.setFilmeID(dados.getInt("FilmeID"));
-            filme.setPositiva(dados.getBoolean("Positiva"));
+            filme.setTitulo(dados.getString("Titulo"));
+            filme.setDiretor(dados.getString("Diretor"));
+            filme.setGenero(dados.getString("Genero"));
+            filme.setIdioma(dados.getString("Idioma"));
+            filme.setDuracao (dados.getInt("Duracao"));
 
             lista.add(filme);
         }
@@ -119,22 +132,25 @@ public class FilmeDAO {
     /**
      * Busca todas as filmes existentes no banco de dados
      *
-     * @param positiva despesa/receita
+     * @param Diretor despesa/receita
      * @return ArrayList<Filme> lista de todas as filme
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public ArrayList<Filme> getAll(boolean positiva) throws SQLException, ClassNotFoundException {
-        String query = "select * from Filme where Positiva = '" + (positiva ? 1 : 0) + "' order by Descricao;";
+    public ArrayList<Filme> getAll(String diretor) throws SQLException, ClassNotFoundException {
+        String query = "select * from Filmes where Diretor like '"+ diretor +"' order by Titulo;";
         ArrayList<Filme> lista = new ArrayList<>();
 
         ResultSet dados = contexto.executeQuery(query);
 
         while (dados.next()) {
             Filme filme = new Filme();
-            filme.setDescricao(dados.getString("Descricao"));
             filme.setFilmeID(dados.getInt("FilmeID"));
-            filme.setPositiva(dados.getBoolean("Positiva"));
+            filme.setTitulo(dados.getString("Titulo"));
+            filme.setDiretor(dados.getString("Diretor"));
+            filme.setGenero(dados.getString("Genero"));
+            filme.setIdioma(dados.getString("Idioma"));
+            filme.setDuracao (dados.getInt("Duracao"));
 
             lista.add(filme);
         }
@@ -143,9 +159,9 @@ public class FilmeDAO {
     }
 
     /**
-     * Atualiza a Categoria a partir dos dados da mesma
+     * Atualiza a filme a partir dos dados da mesma
      *
-     * @param filme Objeto do tipo Categoria com todos os campos para a
+     * @param filme Objeto do tipo filme com todos os campos para a
      * atualização
      * @return true caso ocorra com sucesso; false caso não ocorra com sucesso;
      * @throws ClassNotFoundException
@@ -154,14 +170,23 @@ public class FilmeDAO {
     public boolean update(Filme filme) throws ClassNotFoundException, SQLException {
         StringBuilder columnsAndValues = new StringBuilder(255);
 
-        columnsAndValues.append("Descricao= '")
-                .append(filme.getDescricao())
+        columnsAndValues.append(" Titulo= '")
+                .append(filme.getTitulo())
                 .append("'");
-        columnsAndValues.append("Positiva= '")
-                .append(filme.isPositiva())
+        columnsAndValues.append(" Diretor= '")
+                .append(filme.getDiretor())
+                .append("'");
+        columnsAndValues.append(" Genero= '")
+                .append(filme.getGenero())
+                .append("'");
+        columnsAndValues.append(" Idioma= '")
+                .append(filme.getIdioma())
+                .append("'");
+        columnsAndValues.append(" Duracao= '")
+                .append(filme.getDuracao())
                 .append("'");
 
-        String query = "update Filme SET "
+        String query = "update Filmes SET "
                 + columnsAndValues.toString()
                 + " WHERE FilmeID = " + filme.getFilmeID();
 
@@ -179,7 +204,7 @@ public class FilmeDAO {
      * @throws SQLException
      */
     public boolean delete(int id) throws ClassNotFoundException, SQLException {
-        String sql = "delete from Filme where FilmeID = ?";
+        String sql = "delete from Filmes where FilmeID = ?";
         try (PreparedStatement preparedStatement = contexto.getConexao().prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             preparedStatement.execute();

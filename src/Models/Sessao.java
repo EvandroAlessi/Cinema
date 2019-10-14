@@ -1,65 +1,26 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Models;
 
 import java.time.LocalDate;
 
 /**
- * Sessao
+ * Modelo estrutural de Sessao.
+ * Gera objetos modelos para comunicação com BD ou utilização na GUI.
+ * @author Evandro Alessi
+ * @author Eric Ueta
+ * @see Sessao
  */
 public class Sessao {
-    private Filme filme;
-    private Sala sala;
+    private int sessaoID;
+    private int filmeID;
+    private int salaID;
+    private int ingressos;
     private LocalDate data;
     private double valorIngresso;
-    private int IngressoDisponivel;
-
-    public Sessao() {
-    }
-    
-    public Sessao(Filme filme, Sala sala, LocalDate data, double valorIngresso, int IngressoDisponivel) {
-        this.filme = filme;
-        this.sala = sala;
-        this.data = data;
-        this.valorIngresso = valorIngresso;
-        this.IngressoDisponivel = IngressoDisponivel;
-    }
-    
-    public Filme getFilme() {
-        return filme;
-    }
-
-    public void setFilme(Filme filme) {
-        this.filme = filme;
-    }
-
-    public Sala getSala() {
-        return sala;
-    }
-
-    public void setSala(Sala sala) {
-        this.sala = sala;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
-
-    public double getValorIngresso() {
-        return valorIngresso;
-    }
-
-    public void setValorIngresso(double valorIngresso) {
-        this.valorIngresso = valorIngresso;
-    }
-
-    public int getIngressoDisponivel() {
-        return IngressoDisponivel;
-    }
-
-    public void setIngressoDisponivel(int IngressoDisponivel) {
-        this.IngressoDisponivel = IngressoDisponivel;
-    }
+    private Filme filme;
+    private Sala sala;
 }

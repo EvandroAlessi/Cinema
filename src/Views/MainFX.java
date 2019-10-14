@@ -5,40 +5,107 @@
  */
 package Views;
 
+import CrossCutting.Enums.Tela;
+import java.util.Optional;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import javafx.stage.WindowEvent;
 
 /**
- *
- * @author a2065428
+ * View principal, onde o programa é inicializado e a primeira janela é criada
+ * @author Evandro Alessi
+ * @author Eric Ueta
  */
 public class MainFX extends Application {
-    
+
+    // Declaração de containers e componentes
+    private static BorderPane root;
+    private MenuSuperiorFX menuSuperior;
+    private MenuLateralFX menuLateral;
+    //private ResumoFX resumo;
+    private Stage stage;
+
     @Override
-    public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
+    public void init() {
+        // Instanciação da tela inicial e menus
+        root = new BorderPane();
+        menuSuperior = new MenuSuperiorFX(this);
+        menuLateral = new MenuLateralFX(this);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        stage = primaryStage;
+        root.setLeft(menuLateral);
+        root.setTop(menuSuperior);
+        root.setStyle("-fx-focus-color: transparent;"
+                + "-fx-faint-focus-color: #d2d4d6;");
+        switchCenter(Tela.RESUMO);
+        primaryStage.setMaximized(true); // Tela cheia
+        Scene scene = new Scene(root, 700, 700);
+        stage.setMinHeight(600);
+        stage.setMinWidth(800);
+        primaryStage.setTitle("Controle de Fluxo de Caixa");
+        primaryStage.setScene(scene);
+        
+        stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, e-> {
+            e.consume();
+            ButtonType btnSim = new ButtonType("Sim", ButtonBar.ButtonData.OK_DONE);
+            ButtonType btnNao = new ButtonType("Não", ButtonBar.ButtonData.CANCEL_CLOSE);
+            Alert alert = new Alert(Alert.AlertType.WARNING, "", btnSim, btnNao);
+            alert.setHeaderText("Deseja realmente sair?");
+            alert.setContentText("Tem certeza?");
+            Window window = alert.getDialogPane().getScene().getWindow();
+            window.setOnCloseRequest(ev -> alert.hide());
+            Optional<ButtonType> result = alert.showAndWait();
+            result.ifPresent(res->{
+                if (res.equals(btnSim)) {
+                    Platform.exit();
+                    System.exit(0);
+                } else if (res.equals(btnNao)) {
+                    alert.close();
+                }
+            });
         });
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        
-        Scene scene = new Scene(root, 300, 250);
-        
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    /**
+     * Alternar entre as telas exibidas
+     * @param tela
+     */
+    public void switchCenter(Tela tela) {
+        switch (tela) {
+            case RESUMO:
+                root.setCenter(new ResumoFX(this.stage));
+                break;
+            case ULTIMOS:
+                root.setCenter(new RelatorioFX(this.stage, true, "Últimos lançamentos"));
+                break;
+            case FUTURO:
+                root.setCenter(new RelatorioFX(this.stage, false, "Lançamentos Futuros"));
+                break;
+            case RECEITA:
+                root.setCenter(new ReceitaFX(this.stage));
+                break;
+            case DESPESA:
+                root.setCenter(new DespesaFX(this.stage));
+                break;
+            case CATEGORIA:
+                root.setCenter(new CategoriaSubFX(this.stage));
+                break;
+            case SUBCATEGORIA:
+                //root.setCenter(new SubCategoriaFX(this.stage));
+                break;
+        }
     }
 
     /**
@@ -47,5 +114,5 @@ public class MainFX extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }
