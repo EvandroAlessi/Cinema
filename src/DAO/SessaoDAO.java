@@ -90,8 +90,9 @@ public class SessaoDAO {
     * @throws ClassNotFoundException
     * @throws SQLException
     */
-    public boolean exists(int salaID) throws ClassNotFoundException, SQLException{
-        String query = "select * from Sessoes where SalaID = '"+ salaID +"';";
+    public boolean exists(int salaID, LocalDateTime data) throws ClassNotFoundException, SQLException{
+        String query = "select s.* from Sessoes AS s INNER JOIN Filmes AS f where SalaID = '"+ salaID +"' AND Data > ('"+ data +"' + f.Duracao);";
+        //String query = "select s.* from Sessoes AS s INNER JOIN Filmes AS f where SalaID = '2' AND Data > ('2019-08-08 10:00:00' + f.Duracao);";
 
         ResultSet dados = contexto.executeQuery(query);
 

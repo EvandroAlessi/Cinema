@@ -35,7 +35,7 @@ public class SessaoController {
             //if (sessao.getIngressos() > 0) {
                 if (sessao.getData() != null) {
                     if (sessao.getValorIngresso() >= 0) {
-                        if (!dao.exists(sessao.getSalaID())) {
+                        if (!dao.exists(sessao.getSalaID(), sessao.getData())) {
                             if (dao.create(sessao)) {
                                 return sessao;
                             } else {
