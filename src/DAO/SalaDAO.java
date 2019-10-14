@@ -78,7 +78,7 @@ public class SalaDAO {
     * @throws SQLException
     */
     public boolean exists(String numero) throws ClassNotFoundException, SQLException{
-        String query = "select * from Salas where Numero = '"+ Numero +"';";
+        String query = "select * from Salas where Numero = '"+ numero +"';";
 
         ResultSet dados = contexto.executeQuery(query);
 

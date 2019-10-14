@@ -50,7 +50,7 @@ public class FilmeDAO {
             preparestatement.setString(1, filme.getTitulo()); //substitui o ? pelo dado do usuario
             preparestatement.setString(2, filme.getDiretor()); 
             preparestatement.setString(3, filme.getGenero());
-            preparestatement.setString(4, (filme.getIdioma());
+            preparestatement.setString(4, filme.getIdioma());
             preparestatement.setInt(5, filme.getDuracao());
 
             //executando comando sql

@@ -113,7 +113,7 @@ public class SessaoDAO {
             sessao.setSalaID(dados.getInt("SalaID"));
             sessao.setIngressos(dados.getInt("Ingressos"));
             sessao.setData(dados.getDate("Data").toLocalDate());
-            sessao.setValorIngresso(dados.getValorIngresso("ValorIngresso"));
+            sessao.setValorIngresso(dados.getDouble("ValorIngresso"));
 
             String queryFilme = "select * from Filmes where FilmeID = '"
                     + dados.getInt("FilmeID")
@@ -123,13 +123,13 @@ public class SessaoDAO {
             while (dadosFilme.next()) {
                 sessao.setFilme(
                         new Filme(
-                            dadosFilme.getInt("FilmeID")),
+                            dadosFilme.getInt("FilmeID"),
                             dadosFilme.getString("Titulo"),
                             dadosFilme.getString("Diretor"),
                             dadosFilme.getString("Genero"),
                             dadosFilme.getString("Idioma"),
                             dadosFilme.getInt("Duracao")
-                );
+                ));
             }
 
             String querySala = "select * from Salas where SalaID = '"
@@ -137,17 +137,17 @@ public class SessaoDAO {
                         + "';";
             ResultSet dadosSala = contexto.executeQuery(querySala);
 
-            while (dadosCat.next()) {
-                sessao.setSala()(
+            while (dadosSala.next()) {
+                sessao.setSala((
                         new Sala(
                                 dadosSala.getInt("SalaID"),
                                 dadosSala.getInt("Numero"),
                                 dadosSala.getInt("Capacidade")
-                );
+                )));
             }
         }
 
-        return Sessao;
+        return sessao;
     }
 
     /**
@@ -173,7 +173,7 @@ public class SessaoDAO {
             sessao.setSalaID(dados.getInt("SalaID"));
             sessao.setIngressos(dados.getInt("Ingressos"));
             sessao.setData(dados.getDate("Data").toLocalDate());
-            sessao.setValorIngresso(dados.getValorIngresso("ValorIngresso"));
+            sessao.setValorIngresso(dados.getDouble("ValorIngresso"));
 
             String queryFilme = "select * from Filmes where FilmeID = '"
                     + dados.getInt("FilmeID")
@@ -183,13 +183,13 @@ public class SessaoDAO {
             while (dadosFilme.next()) {
                 sessao.setFilme(
                         new Filme(
-                            dadosFilme.getInt("FilmeID")),
+                            dadosFilme.getInt("FilmeID"),
                             dadosFilme.getString("Titulo"),
                             dadosFilme.getString("Diretor"),
                             dadosFilme.getString("Genero"),
                             dadosFilme.getString("Idioma"),
                             dadosFilme.getInt("Duracao")
-                );
+                ));
             }
 
             String querySala = "select * from Salas where SalaID = '"
@@ -197,16 +197,16 @@ public class SessaoDAO {
                         + "';";
             ResultSet dadosSala = contexto.executeQuery(querySala);
 
-            while (dadosCat.next()) {
-                sessao.setSala()(
+            while (dadosSala.next()) {
+                sessao.setSala((
                         new Sala(
                                 dadosSala.getInt("SalaID"),
                                 dadosSala.getInt("Numero"),
                                 dadosSala.getInt("Capacidade")
-                );
+                )));
             }
 
-            list.add(Sessao);
+            list.add(sessao);
         }
 
         return list;
@@ -240,7 +240,7 @@ public class SessaoDAO {
 
         String query = "update Sessoes SET "
                 + columnsAndValues.toString()
-                + " WHERE SessaoID = " + Sessao.getSessaoID();
+                + " WHERE SessaoID = " + sessao.getSessaoID();
 
         int result = contexto.executeUpdate(query);
 

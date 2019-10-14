@@ -20,4 +20,38 @@ public class Sala {
     private int salaID;
     private int numero;
     private int capacidade;
+
+    public Sala(int salaID, int numero, int capacidade) {
+        this.salaID = salaID;
+        this.numero = numero;
+        this.capacidade = capacidade;
+    }
+
+    public Sala() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public int getSalaID() {
+        return salaID;
+    }
+
+    public void setSalaID(int salaID) {
+        this.salaID = salaID;
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
+    public int getCapacidade() {
+        return capacidade;
+    }
+
+    public void setCapacidade(int capacidade) {
+        this.capacidade = capacidade;
+    }
 }
